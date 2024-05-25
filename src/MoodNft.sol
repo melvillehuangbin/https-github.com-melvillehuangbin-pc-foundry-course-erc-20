@@ -60,7 +60,7 @@ contract MoodNft is ERC721, Ownable {
     }
 
     /* flip the mood of the nft */
-    function flipMood(uint256 tokenId) public view {
+    function flipMood(uint256 tokenId) public {
         // only flip when owner requests for it
         if (
             _getApproved(tokenId) != msg.sender &&
@@ -70,10 +70,10 @@ contract MoodNft is ERC721, Ownable {
         }
         // flip to happy when sad
         // else flip to sad
-        if (s_tokenIdToState[tokenId] == NftState.SAD) {
-            s_tokenIdToState[tokenId] == NftState.HAPPY;
+        if (s_tokenIdToState[tokenId] == NftState.HAPPY) {
+            s_tokenIdToState[tokenId] = NftState.SAD;
         } else {
-            s_tokenIdToState[tokenId] == NftState.SAD;
+            s_tokenIdToState[tokenId] = NftState.HAPPY;
         }
     }
 
@@ -93,7 +93,7 @@ contract MoodNft is ERC721, Ownable {
         string memory imageURI = s_happySvg;
 
         // set the ImageURI of the NFT depending on the NftState
-        if (s_tokenIdToState[tokenId] == NftState.HAPPY) {
+        if (s_tokenIdToState[tokenId] == NftState.SAD) {
             imageURI = s_sadSvg;
         }
 
@@ -129,5 +129,9 @@ contract MoodNft is ERC721, Ownable {
 
     function getTokenCounter() external view returns (uint256) {
         return s_tokenCounter;
+    }
+
+    function getTokenState(uint256 tokenId) external view returns (uint256) {
+        return uint256(s_tokenIdToState[tokenId]);
     }
 }
